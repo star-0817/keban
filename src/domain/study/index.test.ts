@@ -128,6 +128,46 @@ describe("calculateGpa", () => {
     expect(customResult.ok && customResult.value.weightedGpa).toBe(3.95);
   });
 
+  it("uses raw credits and grade points for weighted GPA before rounding output", () => {
+    const result = calculateGpa(
+      [
+        levelCourse("raw-1", "Raw A", 1.005, "A"),
+        levelCourse("raw-2", "Raw B", 1.005, "B"),
+      ],
+      {
+        rule: {
+          ...DEFAULT_GPA_RULE,
+          levelGradePoints: { A: 3.334, B: 2.995 },
+        },
+      },
+    );
+
+    expect(result.ok).toBe(true);
+
+    if (!result.ok) {
+      return;
+    }
+
+    expect(result.value.totalCredits).toBe(2.01);
+    expect(result.value.weightedGpa).toBe(3.16);
+    expect(result.value.details).toEqual([
+      {
+        courseId: id("raw-1"),
+        courseName: "Raw A",
+        credit: 1.01,
+        gradePoint: 3.33,
+        source: { type: "level", level: "A" },
+      },
+      {
+        courseId: id("raw-2"),
+        courseName: "Raw B",
+        credit: 1.01,
+        gradePoint: 3,
+        source: { type: "level", level: "B" },
+      },
+    ]);
+  });
+
   it("returns Chinese errors for invalid GPA inputs", () => {
     expect(calculateGpa([])).toEqual({
       ok: false,

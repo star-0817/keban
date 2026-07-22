@@ -82,7 +82,13 @@ export function calculateGpa(
 
   const rule = options.rule ?? DEFAULT_GPA_RULE;
   const seenCourseIds = new Set<EntityId>();
-  const details: GpaCourseDetail[] = [];
+  const calculatedCourses: Array<
+    Readonly<{
+      credit: number;
+      gradePoint: number;
+      detail: GpaCourseDetail;
+    }>
+  > = [];
 
   for (const course of courses) {
     if (seenCourseIds.has(course.id)) {
@@ -101,31 +107,38 @@ export function calculateGpa(
       return gradePoint;
     }
 
-    details.push({
-      courseId: course.id,
-      courseName: course.name,
-      credit: roundToTwoDecimals(course.credit),
-      gradePoint: roundToTwoDecimals(gradePoint.value),
-      source: course.grade,
+    calculatedCourses.push({
+      credit: course.credit,
+      gradePoint: gradePoint.value,
+      detail: {
+        courseId: course.id,
+        courseName: course.name,
+        credit: roundToTwoDecimals(course.credit),
+        gradePoint: roundToTwoDecimals(gradePoint.value),
+        source: course.grade,
+      },
     });
   }
 
-  const totalCredits = details.reduce((sum, detail) => sum + detail.credit, 0);
+  const totalCredits = calculatedCourses.reduce(
+    (sum, course) => sum + course.credit,
+    0,
+  );
 
   if (totalCredits <= 0) {
     return err("没有可计算的课程");
   }
 
-  const weightedGradePointSum = details.reduce(
-    (sum, detail) => sum + detail.gradePoint * detail.credit,
+  const weightedGradePointSum = calculatedCourses.reduce(
+    (sum, course) => sum + course.gradePoint * course.credit,
     0,
   );
 
   return ok({
     totalCredits: roundToTwoDecimals(totalCredits),
     weightedGpa: roundToTwoDecimals(weightedGradePointSum / totalCredits),
-    courseCount: details.length,
-    details,
+    courseCount: calculatedCourses.length,
+    details: calculatedCourses.map((course) => course.detail),
   });
 }
 
