@@ -1,0 +1,19 @@
+{
+  "name": "课伴",
+  "appid": "__UNI__KEBAN",
+  "description": "Android 优先、离线优先校园工具 App",
+  "versionName": "0.1.0",
+  "versionCode": "1",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueCompiler": "uni-app",
+    "compilerVersion": 3,
+    "distribute": {
+      "android": {
+        "permissions": []
+      }
+    }
+  },
+  "vueVersion": "3"
+}

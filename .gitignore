@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# UniApp and Vite outputs
+dist/
+unpackage/
+.hbuilderx/
+
+# Android build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+android/.gradle/
+android/build/
+android/app/build/
+local.properties
+
+# Logs and caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vite/
+.vitest/
+coverage/
+
+# IDE and OS private files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.DS_Store
+Thumbs.db
