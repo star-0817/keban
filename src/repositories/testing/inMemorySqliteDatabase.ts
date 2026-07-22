@@ -32,6 +32,9 @@ export function createInMemorySqliteDatabase(): InMemorySqliteDatabase {
       sql: string,
       params?: SqliteParams,
     ) => queryStatement<T>(state, sql, params ?? []),
+    close: async () => {
+      return;
+    },
     withTransaction: async (operation) => {
       const snapshot = cloneState(state);
       const transaction = createTransaction(state);

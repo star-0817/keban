@@ -55,6 +55,7 @@ export type CreateStudyToolsServiceOptions = Readonly<{
 }>;
 
 const TEMPORARY_DATA_NOTICE = "当前为本地临时数据，重启后会清空。";
+const PERSISTENT_DATA_NOTICE = "数据仅保存在本机，重启后仍会保留。";
 
 export function createStudyToolsService(
   options: CreateStudyToolsServiceOptions,
@@ -63,7 +64,10 @@ export function createStudyToolsService(
 
   return {
     isTemporary: options.isTemporary ?? false,
-    temporaryDataNotice: TEMPORARY_DATA_NOTICE,
+    temporaryDataNotice:
+      options.isTemporary === true
+        ? TEMPORARY_DATA_NOTICE
+        : PERSISTENT_DATA_NOTICE,
     listCoursesForDay: (weekday, termId) =>
       courseRepository.listByWeekdayAndTerm(weekday, termId),
     addCourse: (input) => courseRepository.create(input),
