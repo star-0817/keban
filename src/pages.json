@@ -11,7 +11,7 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "课伴",
-    "navigationBarBackgroundColor": "#F5F7FB",
-    "backgroundColor": "#F5F7FB"
+    "navigationBarBackgroundColor": "#F6F8FC",
+    "backgroundColor": "#F6F8FC"
   }
 }
