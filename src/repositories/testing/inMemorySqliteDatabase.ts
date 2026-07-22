@@ -92,13 +92,23 @@ function executeStatement(
     return;
   }
 
+  if (normalizedSql.toUpperCase().startsWith("UPDATE")) {
+    updateRows(state, normalizedSql, params);
+    return;
+  }
+
+  if (normalizedSql.toUpperCase().startsWith("DELETE FROM")) {
+    deleteRows(state, normalizedSql, params);
+    return;
+  }
+
   throw new Error(`Unsupported in-memory SQL execute statement: ${sql}`);
 }
 
 function queryStatement<T extends SqliteRow>(
   state: DatabaseState,
   sql: string,
-  _params: SqliteParams,
+  params: SqliteParams,
 ): SqliteQueryResult<T> {
   const normalizedSql = normalizeSql(sql);
   const match = /^SELECT\s+(.+)\s+FROM\s+([a-zA-Z_][\w]*)/i.exec(normalizedSql);
@@ -111,10 +121,15 @@ function queryStatement<T extends SqliteRow>(
     .split(",")
     .map((column) => normalizeIdentifier(column.trim()));
   const table = getTable(state, match[2]);
-  const rows = table.rows.map((row) =>
-    Object.fromEntries(
-      selectedColumns.map((column) => [column, row[column] ?? null]),
-    ),
+  const filteredRows = applyWhere(table.rows, normalizedSql, params);
+  const orderedRows = applyOrderBy(filteredRows, normalizedSql);
+  const pagedRows = applyLimitOffset(orderedRows, normalizedSql, params);
+  const rows = pagedRows.map((row) =>
+    selectedColumns[0] === "*"
+      ? { ...row }
+      : Object.fromEntries(
+          selectedColumns.map((column) => [column, row[column] ?? null]),
+        ),
   ) as T[];
 
   return { rows };
@@ -168,6 +183,122 @@ function insertRow(
   );
 
   table.rows.push(row);
+}
+
+function updateRows(
+  state: DatabaseState,
+  sql: string,
+  params: SqliteParams,
+): void {
+  const match =
+    /^UPDATE\s+([a-zA-Z_][\w]*)\s+SET\s+(.+)\s+WHERE\s+([a-zA-Z_][\w]*)\s*=\s*\?$/i.exec(
+      sql,
+    );
+
+  if (!match) {
+    throw new Error(`Unsupported in-memory UPDATE statement: ${sql}`);
+  }
+
+  const table = getTable(state, match[1]);
+  const assignments = match[2].split(",").map((assignment) => {
+    const assignmentMatch = /^\s*([a-zA-Z_][\w]*)\s*=\s*\?\s*$/.exec(
+      assignment,
+    );
+
+    if (!assignmentMatch) {
+      throw new Error(`Unsupported in-memory UPDATE assignment: ${assignment}`);
+    }
+
+    return normalizeIdentifier(assignmentMatch[1]);
+  });
+  const whereColumn = normalizeIdentifier(match[3]);
+  const whereValue = params[assignments.length] ?? null;
+
+  table.rows = table.rows.map((row) =>
+    row[whereColumn] === whereValue
+      ? {
+          ...row,
+          ...Object.fromEntries(
+            assignments.map((column, index) => [column, params[index] ?? null]),
+          ),
+        }
+      : row,
+  );
+}
+
+function deleteRows(
+  state: DatabaseState,
+  sql: string,
+  params: SqliteParams,
+): void {
+  const match =
+    /^DELETE\s+FROM\s+([a-zA-Z_][\w]*)\s+WHERE\s+([a-zA-Z_][\w]*)\s*=\s*\?$/i.exec(
+      sql,
+    );
+
+  if (!match) {
+    throw new Error(`Unsupported in-memory DELETE statement: ${sql}`);
+  }
+
+  const table = getTable(state, match[1]);
+  const whereColumn = normalizeIdentifier(match[2]);
+  const whereValue = params[0] ?? null;
+
+  table.rows = table.rows.filter((row) => row[whereColumn] !== whereValue);
+}
+
+function applyWhere(
+  rows: readonly SqliteRow[],
+  sql: string,
+  params: SqliteParams,
+): readonly SqliteRow[] {
+  const match = /\sWHERE\s+([a-zA-Z_][\w]*)\s*=\s*\?/i.exec(sql);
+
+  if (!match) {
+    return rows;
+  }
+
+  const column = normalizeIdentifier(match[1]);
+  const value = params[0] ?? null;
+
+  return rows.filter((row) => row[column] === value);
+}
+
+function applyOrderBy(
+  rows: readonly SqliteRow[],
+  sql: string,
+): readonly SqliteRow[] {
+  const match = /\sORDER\s+BY\s+([a-zA-Z_][\w]*)\s+(ASC|DESC)/i.exec(sql);
+
+  if (!match) {
+    return rows;
+  }
+
+  const column = normalizeIdentifier(match[1]);
+  const direction = match[2].toUpperCase();
+
+  return [...rows].sort((left, right) => {
+    const leftValue = String(left[column] ?? "");
+    const rightValue = String(right[column] ?? "");
+    const comparison = leftValue.localeCompare(rightValue);
+
+    return direction === "DESC" ? -comparison : comparison;
+  });
+}
+
+function applyLimitOffset(
+  rows: readonly SqliteRow[],
+  sql: string,
+  params: SqliteParams,
+): readonly SqliteRow[] {
+  if (!/\sLIMIT\s+\?\s+OFFSET\s+\?/i.test(sql)) {
+    return rows;
+  }
+
+  const limit = Number(params[0]);
+  const offset = Number(params[1]);
+
+  return rows.slice(offset, offset + limit);
 }
 
 function parseValues(

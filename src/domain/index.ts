@@ -3,5 +3,6 @@
 export * from "./entity";
 export * from "./ids";
 export * from "./result";
+export * from "./roster";
 export * from "./time";
 export * from "./validation";
