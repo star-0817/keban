@@ -1,277 +1,280 @@
-# Campus Toolbox Development Document
+# 课伴开发文档
 
-## 1. Overview
+## 1. 项目概述
 
-### 1.1 Product name
+### 1.1 产品名称
 
-Working name: Campus Toolbox (Chinese name to be decided before release).
+产品名称：课伴  
+产品定位语：学生的离线校园工具箱。
 
-### 1.2 Product statement
+“课伴”表示课上课下陪伴学生完成琐碎事务的工具。正式发布前应在目标应用商店、商标库和域名平台检索名称可用性；若存在冲突，可使用“课伴工具箱”作为备选名称。
 
-Campus Toolbox is an Android-first, offline utility app for university students and class committee members. It combines class administration, study planning, and document processing into fast, privacy-conscious tools.
+### 1.2 产品定义
 
-### 1.3 Product goals
+课伴是一款 Android 优先、离线优先的学生实用工具 App，服务在校学生和班委。产品聚焦班级事务、学习管理及文档处理，核心数据和文件默认仅保存在用户设备本地。
 
-- Complete a common student task in three interactions or fewer where practical.
-- Require no account, server, or cloud sync for core features.
-- Keep user data and documents on the device by default.
-- Provide a useful first release before introducing advanced AI, OCR, or speech features.
+### 1.3 产品目标
 
-### 1.4 Non-goals for v1
+- 让学生在三个操作步骤内完成常见任务（适用时）。
+- 核心功能无需账号、服务器或云同步。
+- 默认不上传学生名单、成绩、文件和录音等隐私数据。
+- 先交付可靠的基础工具，再考虑 OCR、语音转文字等重型能力。
 
-- Social feed, class chat, or collaboration service.
-- User accounts, server-side storage, or cross-device synchronization.
-- Online job aggregation or web scraping.
-- Cloud OCR, cloud speech recognition, or automatic AI content generation.
-- Storing PDF, image, or audio binary content in the database.
+### 1.4 第一版不做什么
 
-## 2. Target Users and Scenarios
+- 社区、班级聊天、多人协作或动态流。
+- 登录账号、服务端存储、跨设备自动同步。
+- 在线招聘信息聚合、网页爬取或自动投递。
+- 云端 OCR、云端语音识别、自动生成式 AI 功能。
+- 将 PDF、图片、音频等二进制文件直接写入数据库。
 
-| User | Situation | Desired outcome |
+## 2. 用户与核心场景
+
+| 用户 | 场景 | 用户希望得到的结果 |
 | --- | --- | --- |
-| Student | Needs a clean assignment cover quickly | Fill a form and export a PDF cover |
-| Student | Has several photos of notes or homework | Create one ordered PDF locally |
-| Student | Needs to track courses, assignments, and exams | See today's schedule and upcoming deadlines |
-| Student | Wants to manage grades and attendance | Calculate weighted average, GPA, and absence margin |
-| Class committee member | Needs to choose a student fairly in class | Pick from a roster and retain a draw history |
-| Class committee member | Needs to divide classmates into teams | Build balanced random groups from an imported roster |
+| 学生 | 临近提交作业，需要规范封面 | 填写信息后本地导出 PDF 封面 |
+| 学生 | 有多张笔记/作业照片 | 将图片排序后合成为一个 PDF |
+| 学生 | 需要管理课程、作业和考试 | 在首页看到今天课程和临近截止事项 |
+| 学生 | 需要了解成绩或考勤状态 | 算出加权平均分、绩点和可缺勤余量 |
+| 班委 | 课堂上需要公平抽人 | 从名单中随机抽取并保留历史 |
+| 班委 | 需要把同学分为若干小组 | 导入名单后快速得到随机分组 |
 
-## 3. Scope and Priorities
+## 3. 功能范围与优先级
 
-### 3.1 Release 1: publishable MVP
+### 3.1 第一版：可发布的最小产品
 
-| Area | Feature | Notes |
+| 模块 | 功能 | 说明 |
 | --- | --- | --- |
-| App shell | Bottom navigation, theme, onboarding, privacy notice | No sign-in |
-| Home | Today cards, upcoming deadlines, recent tools | Home is a dashboard, not a tool directory |
-| Class | Roster, random picker, random grouping, history | Import plain text or CSV first |
-| Study | Timetable, deadlines, study plans, Pomodoro | Local notifications for events |
-| Calculators | Weighted average/GPA and attendance margin | Configurable grading and attendance rules |
-| Documents | Assignment cover, image-to-PDF, PDF merge, page order | All processing happens locally |
-| Data | Local database, JSON backup, restore validation | Files are referenced by URI/path only |
-| Settings | Dark mode, notifications, data management, privacy page | Include delete-all-local-data action |
+| 应用基础 | 底部导航、主题、首次引导、隐私说明 | 不提供登录 |
+| 首页 | 今日课程、临近截止、最近工具 | 首页是任务看板，不是工具列表 |
+| 班级 | 名单、随机抽人、随机分组、历史 | 第一版支持文本和 CSV 导入 |
+| 学习 | 课程表、倒计时、学习计划、番茄钟 | 事项支持本地通知 |
+| 计算工具 | 加权平均分/绩点、考勤余量 | 支持设置计算规则 |
+| 文档 | 作业封面、图片转 PDF、PDF 合并与排序 | 所有处理均在本地完成 |
+| 数据 | 本地数据库、JSON 备份、恢复校验 | 文件只保存路径或 URI |
+| 设置 | 深色模式、通知、数据管理、隐私页 | 必须提供清空本地数据 |
 
-### 3.2 Release 2: after validation
+### 3.2 第二版：通过内测验证后再开发
 
-- PDF split, compression, watermark, and page deletion.
-- Class fund ledger and homework submission checklist.
-- Course-table home-screen widget.
-- More assignment-cover templates, including importable school templates.
-- App-level SQLite export and encrypted backup option.
-- Premium purchase and rewarded-ad integration after value validation.
+- PDF 拆分、压缩、水印和删除页面。
+- 班费账本、作业提交清单。
+- 课程表桌面小组件。
+- 更多作业封面模板，以及本校模板导入。
+- SQLite 数据导出和加密备份。
+- 在价值验证完成后接入专业版购买和激励广告。
 
-### 3.3 Release 3: native/offline intelligence
+### 3.3 第三版：原生离线智能能力
 
-- On-device OCR for image text extraction.
-- On-device speech-to-text.
-- Local document scanning: edge detection, perspective correction, and image enhancement.
+- 本地 OCR：从图片中提取文字。
+- 本地语音转文字。
+- 本地扫描：边缘检测、透视校正、图像增强。
 
-These features require native Android libraries or models. They must remain optional downloads or clearly disclose package-size impact.
+这类功能需要引入 Android 原生库或模型，必须评估许可证、设备兼容性和安装包体积。应作为可选下载或在下载前明确提示体积影响。
 
-## 4. Information Architecture
+## 4. 信息架构
 
 ```text
-Home
-Class
-  Roster
-  Random picker
-  Random grouping
-  Draw history
-Study
-  Timetable
-  Deadlines
-  Study plans
-  Pomodoro
-  Grade calculator
-  Attendance calculator
-Documents
-  Assignment cover
-  Image to PDF
-  PDF merge
-  Page sorting
-Profile
-  Backup and restore
-  Settings
-  Privacy
-  Pro upgrade
+首页
+班级
+  名单管理
+  随机抽人
+  随机分组
+  抽取历史
+学习
+  课程表
+  日程与倒计时
+  学习计划
+  番茄钟
+  绩点计算
+  考勤计算
+文档
+  作业封面
+  图片转 PDF
+  PDF 合并
+  PDF 页面排序
+我的
+  备份与恢复
+  设置
+  隐私说明
+  专业版
 ```
 
-Bottom navigation: Home, Class, Study, Documents, Profile.
+底部导航固定为：首页、班级、学习、文档、我的。
 
-## 5. Functional Requirements
+## 5. 功能需求
 
-### 5.1 Class tools
+### 5.1 班级工具
 
-- Create multiple rosters, each with a name and optional class metadata.
-- Add students manually or import CSV/plain-text names.
-- Pick one or more students randomly and optionally exclude previously selected people.
-- Split a roster into a specified number of groups or a target group size.
-- Save draw/group history locally; allow history clearing.
-- Do not claim randomness suitable for lotteries or other high-stakes decisions.
+- 可创建多个名单，名单包含名称及可选班级信息。
+- 支持手动新增学生、导入 CSV 或粘贴文本名单。
+- 支持抽取一人或多人，并可排除已抽到的同学。
+- 支持按指定组数或每组目标人数随机分组。
+- 在本地保存抽取/分组历史，支持用户主动清空。
+- 不得宣称随机能力适用于抽奖、博彩或任何高风险决策。
 
-### 5.2 Study tools
+### 5.2 学习工具
 
-- Support weekly timetable entries: course name, teacher, room, weekday, start/end section, and odd/even week rule.
-- Create deadline events: assignment, exam, activity, and custom event.
-- Create plans with tasks, estimated duration, status, and due date.
-- Run a configurable Pomodoro timer and record completed focus sessions.
-- Calculate weighted average and GPA from course score and credit values.
-- Calculate remaining allowable absence from total lessons, absence count, and minimum attendance percentage.
+- 课程表记录课程名称、教师、教室、星期、起止节次和单双周规则。
+- 日程支持作业、考试、活动和自定义事项；可设置截止时间和提醒时间。
+- 学习计划包含任务、预估时长、状态与截止日期。
+- 番茄钟可配置时长，并记录已完成的专注时段。
+- 根据课程成绩和学分计算加权平均分、绩点。
+- 根据总课时、已缺勤和最低出勤比例计算仍可缺勤的课时。
 
-### 5.3 Document tools
+### 5.3 文档工具
 
-- Generate an assignment cover from a structured form and a local template.
-- Select multiple images, reorder them, and export one PDF.
-- Select multiple PDFs, reorder them, and merge them into a new PDF.
-- Keep source files unchanged; all output must use a newly created file name.
-- Show progress, errors, cancellation, and final save/share action for long operations.
-- Clearly state that files are processed locally.
+- 从结构化表单和本地模板生成作业封面。
+- 可多选图片、调整顺序并导出为单个 PDF。
+- 可多选 PDF、调整顺序并合成为新的 PDF。
+- 永远不修改源文件；输出必须使用新文件名。
+- 耗时任务必须显示进度、错误、取消操作和完成后的保存/分享入口。
+- 在处理页面明确提示“文件仅在本机处理，不会上传服务器”。
 
-### 5.4 Backup and restoration
+### 5.4 备份与恢复
 
-- Export structured records as a versioned JSON file.
-- Validate schema/version before importing.
-- Default import behavior is merge with duplicate detection; replace-all requires an explicit confirmation.
-- File references are restored only when still valid on the device; missing references show a recoverable warning.
+- 以带版本号的 JSON 文件导出结构化数据。
+- 导入时校验文件格式和版本。
+- 默认采用合并导入，并检测重复记录；“覆盖全部”必须二次确认。
+- 仅当设备中原始路径仍可访问时恢复文件引用；缺失引用显示可处理的提示。
 
-## 6. Technical Architecture
+## 6. 技术架构
 
 ```text
-UniApp (Vue 3 + TypeScript)
+UniApp（Vue 3 + TypeScript）
   |
-  +-- Presentation: pages, reusable components, composables
-  +-- State: Pinia stores
-  +-- Domain: pure TypeScript services and validators
-  +-- Persistence: repository layer over SQLite
-  +-- Platform bridge: UniApp APIs and Android native plugins
-       +-- Files and share sheet
-       +-- PDF generation and manipulation
-       +-- Local notifications
-       +-- Optional OCR and speech modules (later)
+  +-- 展示层：页面、通用组件、组合式函数
+  +-- 状态层：Pinia Store
+  +-- 领域层：纯 TypeScript 业务服务与校验器
+  +-- 持久层：SQLite 仓储层
+  +-- 平台桥接层：UniApp API 与 Android 原生插件
+       +-- 文件选择、保存和分享
+       +-- PDF 生成与处理
+       +-- 本地通知
+       +-- OCR / 语音转文字（后续）
 ```
 
-### 6.1 Recommended stack
+### 6.1 推荐技术选型
 
-| Concern | Choice | Reason |
+| 领域 | 选型 | 原因 |
 | --- | --- | --- |
-| App framework | UniApp, Vue 3, TypeScript | Reuses the team's Vue skills and builds Android packages |
-| State | Pinia | Predictable feature-level state |
-| Local database | SQLite | Reliable queries and scalable structured local records |
-| Small preferences | UniApp storage | Theme, onboarding status, and simple flags |
-| File processing | Android native UniApp plugins | Better performance and API access than JavaScript alone |
-| Notifications | Android local-notification plugin | No server required |
-| Backup format | Versioned JSON | Transparent and portable |
-| Testing | Vitest for domain logic; manual Android acceptance tests | Good fit for offline app logic |
+| 应用框架 | UniApp、Vue 3、TypeScript | 复用 Vue 基础，便于打包 Android App |
+| 状态管理 | Pinia | 模块化且便于维护 |
+| 本地数据库 | SQLite | 适合结构化数据和后续查询扩展 |
+| 简单配置 | UniApp Storage | 用于主题、首次引导、开关等轻量信息 |
+| 文件处理 | Android 原生 UniApp 插件 | 比纯 JavaScript 更高效且可访问系统能力 |
+| 通知 | Android 本地通知插件 | 不依赖服务器 |
+| 备份格式 | 带版本号 JSON | 可读、易迁移、易校验 |
+| 测试 | Vitest + 真机手工验收 | 适合离线业务逻辑和原生能力验证 |
 
-### 6.2 Code layout
+### 6.2 建议代码目录
 
 ```text
 src/
-  pages/             Feature screens
-  components/        Reusable UI components
-  stores/            Pinia state stores
-  services/          Domain logic and use cases
-  repositories/      SQLite persistence implementations
-  types/             Shared TypeScript types
-  utils/             Pure helpers and validators
-  plugins/           TypeScript wrappers for Android native plugins
-  assets/            Icons, cover templates, and static resources
-docs/                Product and development documentation
+  pages/             页面
+  components/        通用组件
+  stores/            Pinia 状态模块
+  services/          业务服务和用例
+  repositories/      SQLite 数据访问实现
+  types/             共享 TypeScript 类型
+  utils/             纯工具函数和校验器
+  plugins/           Android 原生插件的 TypeScript 封装
+  assets/            图标、封面模板、静态资源
+docs/                产品与开发文档
 ```
 
-### 6.3 Android-native boundary
+### 6.3 原生插件边界
 
-Use native plugins only behind typed wrappers. The UI must never invoke Android APIs directly. Each plugin should define:
+所有 Android 原生插件必须封装在具备类型定义的 TypeScript 包装层之后，页面代码不得直接调用 Android API。每个插件需声明：
 
-- input/output TypeScript contracts;
-- supported Android version range;
-- permission requirements;
-- cancellation behavior;
-- error codes and user-safe messages;
-- manual test cases on a physical Android device.
+- 输入和输出的 TypeScript 类型；
+- 支持的 Android 版本范围；
+- 所需权限；
+- 取消行为；
+- 错误码及面向用户的安全提示；
+- 物理 Android 设备上的手工测试用例。
 
-## 7. Local Data Model
+## 7. 本地数据模型
 
-| Table | Primary fields |
+| 表名 | 核心字段 |
 | --- | --- |
-| `rosters` | id, name, metadata, created_at, updated_at |
-| `students` | id, roster_id, name, student_no, tags, created_at |
-| `draw_history` | id, roster_id, mode, selected_student_ids, created_at |
-| `timetable_entries` | id, course_name, weekday, start_slot, end_slot, week_rule, room |
-| `events` | id, title, type, due_at, reminder_at, status, note |
-| `study_plans` | id, title, start_at, due_at, status |
-| `study_tasks` | id, plan_id, title, estimated_minutes, due_at, status |
-| `focus_sessions` | id, task_id, started_at, duration_seconds, completed |
-| `grade_courses` | id, term, name, credit, score, grade_point |
-| `attendance_courses` | id, name, total_lessons, absences, minimum_rate |
-| `document_jobs` | id, type, display_name, output_uri, created_at, status |
-| `settings` | key, value, updated_at |
+| `rosters` | id、name、metadata、created_at、updated_at |
+| `students` | id、roster_id、name、student_no、tags、created_at |
+| `draw_history` | id、roster_id、mode、selected_student_ids、created_at |
+| `timetable_entries` | id、course_name、weekday、start_slot、end_slot、week_rule、room |
+| `events` | id、title、type、due_at、reminder_at、status、note |
+| `study_plans` | id、title、start_at、due_at、status |
+| `study_tasks` | id、plan_id、title、estimated_minutes、due_at、status |
+| `focus_sessions` | id、task_id、started_at、duration_seconds、completed |
+| `grade_courses` | id、term、name、credit、score、grade_point |
+| `attendance_courses` | id、name、total_lessons、absences、minimum_rate |
+| `document_jobs` | id、type、display_name、output_uri、created_at、status |
+| `settings` | key、value、updated_at |
 
-Store paths or Android content URIs for files. Do not store image/PDF/audio binary data in SQLite.
+图片、PDF、音频等文件仅保存路径或 Android Content URI，不能将二进制内容存进 SQLite。
 
-## 8. Privacy, Permissions, and Compliance
+## 8. 隐私、权限与合规
 
-- No account is required.
-- Explain local-only storage during onboarding and before document processing.
-- Request media/file access only at the action that requires it.
-- Request notification permission only after a user creates a reminder.
-- Include a readable privacy policy before publishing.
-- Provide delete-all-local-data and document-cache cleanup controls.
-- If ads or analytics are later added, update the privacy policy and allow choices where required.
-- Never upload user documents, recordings, student rosters, or grades without a separate explicit opt-in.
+- 不要求用户注册账号。
+- 首次引导和文档处理前说明“数据仅保存在本机”。
+- 仅在用户主动选择文件/图片时申请对应媒体或文件权限。
+- 仅在用户创建提醒后申请通知权限。
+- 发布前必须提供可读、可访问的隐私政策。
+- 提供“清空全部本地数据”和“清理文档缓存”。
+- 未来若接入广告或统计服务，必须更新隐私政策，并按法规提供必要选择。
+- 未经单独且明确的用户授权，不得上传用户文件、录音、学生名单或成绩。
 
-## 9. Quality Requirements
+## 9. 质量要求
 
-- Offline core flows remain usable after initial installation.
-- App start reaches Home in under 2 seconds on a representative mid-range Android device.
-- UI remains responsive while documents process; use background native processing where available.
-- Source documents are never overwritten.
-- Every storage mutation has validation and recoverable error feedback.
-- Color contrast and touch targets support basic accessibility.
+- 安装完成后，核心功能在无网络环境可用。
+- 在具代表性的中端 Android 设备上，应用启动至首页应少于 2 秒。
+- 文档处理期间界面保持可响应；可用时采用原生后台处理。
+- 源文档不可被覆盖或损坏。
+- 所有数据写入均需输入校验，并提供可恢复的错误反馈。
+- 颜色对比度和点击区域满足基本无障碍要求。
 
-## 10. Monetization Principles
+## 10. 变现原则
 
-### Free tier
+### 免费内容
 
-- Class tools, timetable, GPA, attendance calculator, and basic cover generation.
-- A modest daily/batch limit for expensive document operations if needed.
+- 班级工具、课程表、绩点、考勤计算和基础作业封面。
+- 如有必要，可对高耗时文档任务设置合理的单日或单批次限制。
 
-### Paid options after user validation
+### 价值验证后再提供的付费选项
 
-- Rewarded ad: unlock an individual PDF operation or premium cover export.
-- Pro one-time purchase (target range: CNY 9.9-19.9): no ads, unlimited document tools, advanced templates, advanced class tools, and backup export.
+- 激励广告：单次解锁 PDF 处理或高级封面导出。
+- 专业版一次性买断：建议价格 9.9 至 19.9 元，提供无广告、无限文档处理、高级模板、班委高级功能和完整数据导出。
 
-Do not add ads before the core workflows are reliable. Avoid subscriptions in the initial release.
+在核心流程稳定前不得接入广告。第一版不采用订阅制，降低学生的付费阻力。
 
-## 11. Delivery Plan
+## 11. 开发里程碑
 
-| Milestone | Deliverables | Exit criteria |
+| 阶段 | 交付物 | 完成标准 |
 | --- | --- | --- |
-| M0: Foundation | UniApp project, navigation, theme, SQLite wrapper, privacy shell | Android debug build installs and persists a sample record |
-| M1: Class tools | Roster, picker, grouping, history, import | 20- and 60-person rosters work without duplicate/corruption issues |
-| M2: Study tools | Timetable, deadlines, plans, Pomodoro, calculators | Schedule survives restart and reminders can be scheduled locally |
-| M3: Documents | Cover PDF, image-to-PDF, PDF merge/order | Outputs open correctly and source files remain unchanged |
-| M4: Data and polish | Backup/restore, error states, dark theme, settings | Backup can restore to a clean install and manual acceptance passes |
-| M5: Internal beta | Signed APK, feedback workflow, bug fixes | 20 student testers complete key flows successfully |
+| M0：基础工程 | UniApp 项目、导航、主题、SQLite 封装、隐私外壳 | Android 调试包可安装，并能持久化一条示例数据 |
+| M1：班级工具 | 名单、抽人、分组、历史、导入 | 20 人和 60 人名单均可正常使用，无重复或数据损坏 |
+| M2：学习工具 | 课程表、日程、计划、番茄钟、计算器 | 重启后日程不丢失，能创建本地提醒 |
+| M3：文档工具 | 封面 PDF、图片转 PDF、PDF 合并/排序 | 输出可正常打开，源文件保持不变 |
+| M4：数据与打磨 | 备份恢复、异常状态、深色模式、设置 | 可在干净安装的应用中恢复备份并通过手工验收 |
+| M5：内部测试 | 签名 APK、反馈流程、缺陷修复 | 20 名学生测试者完成关键流程 |
 
-## 12. Acceptance Checklist for v1
+## 12. 第一版验收清单
 
-- [ ] User can create a roster, import names, pick a student, and view history.
-- [ ] User can create a class schedule and see today's courses after app restart.
-- [ ] User can add an assignment deadline and schedule a local reminder.
-- [ ] User can calculate weighted average/GPA and attendance margin with clear input validation.
-- [ ] User can generate an assignment cover PDF locally.
-- [ ] User can convert selected images into a correctly ordered PDF locally.
-- [ ] User can merge selected PDFs without changing originals.
-- [ ] User can export local records and restore them from a validated backup.
-- [ ] App works without a user account and explains its local-data behavior.
-- [ ] Core flows are tested on at least one physical Android device.
+- [ ] 可创建名单、导入姓名、随机抽人并查看历史。
+- [ ] 可创建课程表，重启 App 后仍能看到当天课程。
+- [ ] 可添加作业截止日期，并创建本地提醒。
+- [ ] 可计算加权平均分/绩点和考勤余量，并有明确输入校验。
+- [ ] 可在本地生成作业封面 PDF。
+- [ ] 可将所选图片按正确顺序转为 PDF。
+- [ ] 可合并所选 PDF，且不修改源文件。
+- [ ] 可导出本地数据，并从经校验的备份中恢复。
+- [ ] 无账号也可完成全部核心操作，并清楚说明本地数据策略。
+- [ ] 至少在一台真实 Android 设备上完成核心流程测试。
 
-## 13. Open Decisions
+## 13. 待确定事项
 
-- Final Chinese product name and icon direction.
-- Android minimum SDK and target SDK.
-- Exact native PDF library and its license compatibility.
-- Whether class-fund bookkeeping belongs in release 2 or is removed.
-- Which GPA conversion rules to include by default and how users customize them.
-- Whether Pro unlock uses an app-store in-app purchase, a one-time license, or both.
+- 在发布前完成“课伴”名称、图标方向、商标和应用商店可用性检索。
+- 最低 Android SDK 和目标 SDK 版本。
+- PDF 原生库的具体选型及许可证兼容性。
+- 班费账本是否放入第二版，或从范围中移除。
+- 默认提供哪些绩点换算规则，以及用户如何自定义。
+- 专业版采用应用商店内购、一次性授权，还是两者兼用。

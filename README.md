@@ -1,23 +1,25 @@
-# Campus Toolbox
+# 课伴
 
-Campus Toolbox is an Android-first, offline student utility app. It helps students and class committee members complete common campus tasks without an account or a dedicated server.
+课伴是一款面向在校学生与班委的 Android 优先、离线优先校园工具 App。它将班级事务、学习管理和文档处理整合到一起，不要求注册账号，也不需要自建服务器。
 
-## Product Direction
+> 名称含义：课上课下的随身伙伴。
 
-- Target users: university students and class committee members.
-- Platforms: Android first, built with UniApp; iOS may follow after Android validation.
-- Privacy: user data and files remain on the device by default.
-- Business model: free essentials, optional rewarded unlocks, and a low-cost one-time Pro upgrade.
+## 产品特点
 
-## Initial Modules
+- 本地优先：学生名单、课程、成绩、计划和文件均默认只保存在手机上。
+- 即开即用：不强制登录，常用任务尽量三步内完成。
+- 覆盖场景：抽人分组、课程表、学习计划、作业封面、图片转 PDF、PDF 合并等。
+- Android 优先：基于 UniApp 开发，后续可根据需求扩展 iOS。
 
-- Class tools: roster management, random picker, random grouping, and draw history.
-- Study tools: timetable, deadlines, study plans, Pomodoro, GPA, and attendance calculator.
-- Document tools: assignment cover generation, image-to-PDF, PDF merge, and page sorting.
-- Data tools: local storage, backup export, and import recovery.
+## 首发功能
 
-See [the development document](docs/DEVELOPMENT.md) for the complete product scope, architecture, data model, delivery milestones, and acceptance criteria.
+- 班级：名单管理、随机抽人、随机分组、抽取历史。
+- 学习：课程表、作业/考试倒计时、学习计划、番茄钟、绩点和考勤计算。
+- 文档：作业封面生成、图片转 PDF、PDF 合并和页面排序。
+- 数据：本地保存、备份导出与导入恢复。
 
-## Status
+完整的产品范围、技术架构、数据模型、开发里程碑和验收标准见 [开发文档](docs/DEVELOPMENT.md)。
 
-Planning and technical documentation are in progress. No application code has been created yet.
+## 项目状态
+
+当前处于产品规划与技术设计阶段，尚未创建应用代码。
