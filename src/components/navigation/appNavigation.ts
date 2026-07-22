@@ -52,7 +52,8 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     key: "profile",
     label: "我的",
     icon: "M",
-    implemented: false,
+    implemented: true,
+    url: "/pages/profile/index",
   },
 ] as const;
 

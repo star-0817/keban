@@ -20,12 +20,19 @@
         "navigationBarTitleText": "学习",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "课伴",
-    "navigationBarBackgroundColor": "#F6F8FC",
-    "backgroundColor": "#F6F8FC"
+    "navigationBarBackgroundColor": "#F0FDFA",
+    "backgroundColor": "#F0FDFA"
   }
 }

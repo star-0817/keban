@@ -376,10 +376,17 @@ function createAttendanceRow(
   <AppShell active-tab="study">
     <view class="study-page">
       <view class="page-header">
-        <text class="page-title">学习</text>
-        <text class="page-description">
-          管理课程表和日程，并在本地计算绩点与考勤。
-        </text>
+        <view class="page-header__copy">
+          <text class="eyebrow">学习工具</text>
+          <text class="page-title">课程、日程和计算</text>
+          <text class="page-description">
+            管理课程表和日程，并在本地计算绩点与考勤。
+          </text>
+        </view>
+        <view class="page-stat">
+          <text class="page-stat__number">{{ courses.length }}</text>
+          <text class="page-stat__label">门课程</text>
+        </view>
       </view>
 
       <view class="notice">
@@ -511,7 +518,13 @@ function createAttendanceRow(
         </view>
 
         <view v-if="courses.length === 0" class="empty-state">
-          <text>暂无课程，请先新增本学期该星期的课程。</text>
+          <image
+            class="empty-state__image"
+            src="/static/images/ui/empty-study-schedule.webp"
+            mode="aspectFill"
+          />
+          <text class="empty-state__title">暂无课程</text>
+          <text>请先新增本学期该星期的课程。</text>
         </view>
         <view v-else class="item-list">
           <view v-for="course in courses" :key="course.id" class="item">
@@ -612,6 +625,12 @@ function createAttendanceRow(
         </view>
 
         <view v-if="events.length === 0" class="empty-state">
+          <image
+            class="empty-state__image"
+            src="/static/images/ui/empty-study-schedule.webp"
+            mode="aspectFill"
+          />
+          <text class="empty-state__title">暂无日程</text>
           <text>当前时间范围内暂无日程。</text>
         </view>
         <view v-else class="item-list">
@@ -845,11 +864,62 @@ function createAttendanceRow(
   gap: var(--kb-space-sm);
 }
 
+.page-header {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: var(--kb-space-lg);
+  background: var(--kb-color-surface);
+  border: 1rpx solid var(--kb-color-border-subtle);
+  border-radius: var(--kb-radius-card);
+  box-shadow: var(--kb-shadow-card);
+}
+
+.page-header__copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--kb-space-xs);
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--kb-color-accent);
+  font-size: var(--kb-font-caption);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .page-title {
   color: var(--kb-color-text-primary);
   font-size: var(--kb-font-title);
   font-weight: 700;
   line-height: 1.25;
+}
+
+.page-stat {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 136rpx;
+  height: 136rpx;
+  background: var(--kb-color-brand-soft);
+  border-radius: var(--kb-radius-card);
+}
+
+.page-stat__number {
+  color: var(--kb-color-brand);
+  font-size: var(--kb-font-title);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.page-stat__label {
+  color: var(--kb-color-text-secondary);
+  font-size: var(--kb-font-caption);
+  line-height: 1.2;
 }
 
 .page-description,
@@ -868,23 +938,23 @@ function createAttendanceRow(
 .panel {
   padding: var(--kb-space-md);
   background: var(--kb-color-surface);
-  border: 1rpx solid var(--kb-color-border);
+  border: 1rpx solid var(--kb-color-border-subtle);
   border-radius: var(--kb-radius-card);
 }
 
 .notice {
   color: var(--kb-color-warning);
-  background: #fff8e8;
+  background: var(--kb-color-warning-soft);
 }
 
 .error-banner {
-  color: #b42318;
-  background: #fff1f0;
+  color: var(--kb-color-danger);
+  background: var(--kb-color-danger-soft);
 }
 
 .success-banner {
   color: var(--kb-color-success);
-  background: #eefbf3;
+  background: var(--kb-color-success-soft);
 }
 
 .segments,
@@ -927,11 +997,12 @@ function createAttendanceRow(
 }
 
 .segment {
-  height: 72rpx;
+  min-height: var(--kb-touch-target);
   color: var(--kb-color-text-secondary);
   font-size: var(--kb-font-body);
-  line-height: 72rpx;
-  background: var(--kb-color-surface-muted);
+  line-height: var(--kb-touch-target);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
 }
 
 .segment--active,
@@ -968,13 +1039,13 @@ function createAttendanceRow(
 .textarea {
   box-sizing: border-box;
   width: 100%;
-  min-height: 84rpx;
+  min-height: var(--kb-input-height);
   padding: var(--kb-space-sm);
   color: var(--kb-color-text-primary);
   font-size: var(--kb-font-body);
   line-height: 1.4;
-  background: var(--kb-color-surface-muted);
-  border: 1rpx solid var(--kb-color-border);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
   border-radius: var(--kb-radius-md);
 }
 
@@ -985,14 +1056,14 @@ function createAttendanceRow(
 .primary-button,
 .secondary-button {
   flex: 1;
-  height: 84rpx;
+  min-height: var(--kb-touch-target);
   font-size: var(--kb-font-body);
   font-weight: 700;
-  line-height: 84rpx;
+  line-height: var(--kb-touch-target);
 }
 
 .primary-button {
-  color: #ffffff;
+  color: var(--kb-color-surface);
   background: var(--kb-color-brand);
 }
 
@@ -1003,14 +1074,14 @@ function createAttendanceRow(
 }
 
 .mini-button {
-  height: 64rpx;
+  min-height: 72rpx;
   padding: 0 var(--kb-space-sm);
   font-size: var(--kb-font-caption);
-  line-height: 64rpx;
+  line-height: 72rpx;
 }
 
 .mini-button--danger {
-  color: #b42318;
+  color: var(--kb-color-danger);
 }
 
 .empty-state,
@@ -1018,15 +1089,36 @@ function createAttendanceRow(
 .calc-row,
 .result-box {
   padding: var(--kb-space-sm);
-  background: var(--kb-color-surface-muted);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
   border-radius: var(--kb-radius-md);
 }
 
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--kb-space-xs);
+  padding: var(--kb-space-lg);
   color: var(--kb-color-text-secondary);
   font-size: var(--kb-font-body);
   line-height: 1.5;
   text-align: center;
+  border-style: dashed;
+}
+
+.empty-state__image {
+  width: 220rpx;
+  height: 160rpx;
+  background: var(--kb-color-brand-soft);
+  border-radius: var(--kb-radius-md);
+}
+
+.empty-state__title {
+  color: var(--kb-color-text-primary);
+  font-size: var(--kb-font-body-large);
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .item-main {

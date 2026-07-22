@@ -35,7 +35,7 @@ defineProps<{
 .app-shell__inner {
   box-sizing: border-box;
   min-height: 100%;
-  padding: var(--kb-space-page-top) var(--kb-space-page-x)
+  padding: var(--kb-space-xl) var(--kb-space-page-x)
     calc(
       var(--kb-bottom-nav-height) + var(--kb-space-xl) +
         env(safe-area-inset-bottom)

@@ -60,7 +60,7 @@ function handleTap(key: AppNavigationKey): void {
   padding: var(--kb-space-xs) var(--kb-space-sm)
     calc(var(--kb-space-xs) + env(safe-area-inset-bottom));
   background: var(--kb-color-surface);
-  border-top: 1rpx solid var(--kb-color-border);
+  border-top: 1rpx solid var(--kb-color-border-subtle);
   box-shadow: var(--kb-shadow-nav);
 }
 
@@ -70,9 +70,9 @@ function handleTap(key: AppNavigationKey): void {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  height: 88rpx;
+  min-height: var(--kb-touch-target);
   margin: 0;
-  padding: 0;
+  padding: var(--kb-space-xxs) 0;
   color: var(--kb-color-text-muted);
   font-size: var(--kb-font-caption);
   line-height: 1.2;
@@ -94,7 +94,7 @@ function handleTap(key: AppNavigationKey): void {
 .bottom-navigation__icon {
   display: block;
   width: 40rpx;
-  height: 36rpx;
+  height: 38rpx;
   overflow: hidden;
   font-size: var(--kb-font-caption);
   font-weight: 700;

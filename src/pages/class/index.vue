@@ -177,8 +177,17 @@ function copySeed(seed: string): void {
   <AppShell active-tab="class">
     <view class="class-page">
       <view class="page-header">
-        <text class="page-title">班级工具</text>
-        <text class="page-description">管理名单，完成课堂抽人和随机分组。</text>
+        <view class="page-header__copy">
+          <text class="eyebrow">班级工具</text>
+          <text class="page-title">名单、抽人和分组</text>
+          <text class="page-description"
+            >管理名单，完成课堂抽人和随机分组。</text
+          >
+        </view>
+        <view class="page-stat">
+          <text class="page-stat__number">{{ totalCount }}</text>
+          <text class="page-stat__label">名学生</text>
+        </view>
       </view>
 
       <view class="notice">
@@ -301,7 +310,13 @@ function copySeed(seed: string): void {
         </view>
 
         <view v-if="students.length === 0" class="empty-state">
-          <text>暂无学生，请先新增或导入名单。</text>
+          <image
+            class="empty-state__image"
+            src="/static/images/ui/empty-class-roster.webp"
+            mode="aspectFill"
+          />
+          <text class="empty-state__title">暂无学生</text>
+          <text>请先新增或导入名单，随后即可抽人和分组。</text>
         </view>
         <view v-else class="student-list">
           <view
@@ -503,11 +518,62 @@ function copySeed(seed: string): void {
   gap: var(--kb-space-sm);
 }
 
+.page-header {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: var(--kb-space-lg);
+  background: var(--kb-color-surface);
+  border: 1rpx solid var(--kb-color-border-subtle);
+  border-radius: var(--kb-radius-card);
+  box-shadow: var(--kb-shadow-card);
+}
+
+.page-header__copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--kb-space-xs);
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--kb-color-accent);
+  font-size: var(--kb-font-caption);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .page-title {
   color: var(--kb-color-text-primary);
   font-size: var(--kb-font-title);
   font-weight: 700;
   line-height: 1.25;
+}
+
+.page-stat {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 136rpx;
+  height: 136rpx;
+  background: var(--kb-color-brand-soft);
+  border-radius: var(--kb-radius-card);
+}
+
+.page-stat__number {
+  color: var(--kb-color-brand);
+  font-size: var(--kb-font-title);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.page-stat__label {
+  color: var(--kb-color-text-secondary);
+  font-size: var(--kb-font-caption);
+  line-height: 1.2;
 }
 
 .page-description,
@@ -525,7 +591,7 @@ function copySeed(seed: string): void {
 .panel {
   padding: var(--kb-space-md);
   background: var(--kb-color-surface);
-  border: 1rpx solid var(--kb-color-border);
+  border: 1rpx solid var(--kb-color-border-subtle);
   border-radius: var(--kb-radius-card);
 }
 
@@ -533,13 +599,13 @@ function copySeed(seed: string): void {
   color: var(--kb-color-warning);
   font-size: var(--kb-font-body);
   line-height: 1.45;
-  background: #fff8e8;
+  background: var(--kb-color-warning-soft);
 }
 
 .error-banner {
-  color: #b42318;
+  color: var(--kb-color-danger);
   font-size: var(--kb-font-body);
-  background: #fff1f0;
+  background: var(--kb-color-danger-soft);
 }
 
 .segments {
@@ -564,11 +630,12 @@ function copySeed(seed: string): void {
 }
 
 .segment {
-  height: 72rpx;
+  min-height: var(--kb-touch-target);
   color: var(--kb-color-text-secondary);
   font-size: var(--kb-font-body);
-  line-height: 72rpx;
-  background: var(--kb-color-surface-muted);
+  line-height: var(--kb-touch-target);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
 }
 
 .segment::after,
@@ -615,13 +682,13 @@ function copySeed(seed: string): void {
 .textarea {
   box-sizing: border-box;
   width: 100%;
-  min-height: 84rpx;
+  min-height: var(--kb-input-height);
   padding: var(--kb-space-sm);
   color: var(--kb-color-text-primary);
   font-size: var(--kb-font-body);
   line-height: 1.4;
-  background: var(--kb-color-surface-muted);
-  border: 1rpx solid var(--kb-color-border);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
   border-radius: var(--kb-radius-md);
 }
 
@@ -635,7 +702,7 @@ function copySeed(seed: string): void {
 
 .field-error,
 .preview-line--error {
-  color: #b42318;
+  color: var(--kb-color-danger);
   font-size: var(--kb-font-body);
   line-height: 1.4;
 }
@@ -643,14 +710,14 @@ function copySeed(seed: string): void {
 .primary-button,
 .secondary-button {
   flex: 1;
-  height: 84rpx;
+  min-height: var(--kb-touch-target);
   font-size: var(--kb-font-body);
   font-weight: 700;
-  line-height: 84rpx;
+  line-height: var(--kb-touch-target);
 }
 
 .primary-button {
-  color: #ffffff;
+  color: var(--kb-color-surface);
   background: var(--kb-color-brand);
 }
 
@@ -678,19 +745,39 @@ function copySeed(seed: string): void {
 }
 
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--kb-space-xs);
   padding: var(--kb-space-lg);
   color: var(--kb-color-text-secondary);
   font-size: var(--kb-font-body);
   line-height: 1.5;
   text-align: center;
-  background: var(--kb-color-surface-muted);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx dashed var(--kb-color-border);
   border-radius: var(--kb-radius-md);
+}
+
+.empty-state__image {
+  width: 220rpx;
+  height: 160rpx;
+  background: var(--kb-color-brand-soft);
+  border-radius: var(--kb-radius-md);
+}
+
+.empty-state__title {
+  color: var(--kb-color-text-primary);
+  font-size: var(--kb-font-body-large);
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .student-item,
 .group-card {
   padding: var(--kb-space-sm);
-  background: var(--kb-color-surface-muted);
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
   border-radius: var(--kb-radius-md);
 }
 
@@ -707,22 +794,24 @@ function copySeed(seed: string): void {
 }
 
 .mini-button {
-  height: 64rpx;
+  min-height: 72rpx;
   padding: 0 var(--kb-space-sm);
   font-size: var(--kb-font-caption);
-  line-height: 64rpx;
+  line-height: 72rpx;
 }
 
 .mini-button--danger {
-  color: #b42318;
+  color: var(--kb-color-danger);
 }
 
 .check-item {
-  height: 76rpx;
+  min-height: var(--kb-touch-target);
   color: var(--kb-color-text-secondary);
   font-size: var(--kb-font-body);
-  line-height: 76rpx;
+  line-height: var(--kb-touch-target);
   text-align: left;
+  background: var(--kb-color-surface-raised);
+  border: 1rpx solid var(--kb-color-border-subtle);
 }
 
 .check-item--active {
@@ -732,7 +821,7 @@ function copySeed(seed: string): void {
 
 .result-box {
   padding: var(--kb-space-md);
-  background: var(--kb-color-background);
+  background: var(--kb-color-brand-soft);
   border-radius: var(--kb-radius-md);
 }
 
