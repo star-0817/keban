@@ -9,8 +9,15 @@
     "usingComponents": true,
     "nvueCompiler": "uni-app",
     "compilerVersion": 3,
+    "icon": "/static/images/ui/app-icon-1024.png",
     "distribute": {
       "android": {
+        "icons": {
+          "hdpi": "/static/images/ui/app-icon-1024.png",
+          "xhdpi": "/static/images/ui/app-icon-1024.png",
+          "xxhdpi": "/static/images/ui/app-icon-1024.png",
+          "xxxhdpi": "/static/images/ui/app-icon-1024.png"
+        },
         "permissions": []
       }
     }

@@ -36,14 +36,14 @@ describe("app navigation", () => {
       type: "reLaunch",
       url: "/pages/study/index",
     });
+    expect(getNavigationTapFeedback("profile")).toEqual({
+      type: "reLaunch",
+      url: "/pages/profile/index",
+    });
   });
 
-  it("keeps unfinished tabs on the development toast", () => {
+  it("keeps the document tab on the development toast", () => {
     expect(getNavigationTapFeedback("documents")).toEqual({
-      type: "toast",
-      message: "功能开发中",
-    });
-    expect(getNavigationTapFeedback("profile")).toEqual({
       type: "toast",
       message: "功能开发中",
     });
