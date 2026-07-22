@@ -252,16 +252,34 @@ function applyWhere(
   sql: string,
   params: SqliteParams,
 ): readonly SqliteRow[] {
-  const match = /\sWHERE\s+([a-zA-Z_][\w]*)\s*=\s*\?/i.exec(sql);
+  const whereMatch = /\sWHERE\s+(.+?)(?:\sORDER\s+BY|\sLIMIT|$)/i.exec(sql);
 
-  if (!match) {
+  if (!whereMatch) {
     return rows;
   }
 
-  const column = normalizeIdentifier(match[1]);
-  const value = params[0] ?? null;
+  const conditions = whereMatch[1].split(/\s+AND\s+/i).map((condition) => {
+    const match = /^\s*([a-zA-Z_][\w]*)\s*(=|<|>)\s*\?\s*$/i.exec(condition);
 
-  return rows.filter((row) => row[column] === value);
+    if (!match) {
+      throw new Error(`Unsupported in-memory WHERE condition: ${condition}`);
+    }
+
+    return {
+      column: normalizeIdentifier(match[1]),
+      operator: match[2],
+    };
+  });
+
+  return rows.filter((row) =>
+    conditions.every((condition, index) =>
+      compareWhereValue(
+        row[condition.column] ?? null,
+        condition.operator,
+        params[index] ?? null,
+      ),
+    ),
+  );
 }
 
 function applyOrderBy(
@@ -278,12 +296,32 @@ function applyOrderBy(
   const direction = match[2].toUpperCase();
 
   return [...rows].sort((left, right) => {
-    const leftValue = String(left[column] ?? "");
-    const rightValue = String(right[column] ?? "");
-    const comparison = leftValue.localeCompare(rightValue);
+    const leftValue = left[column] ?? "";
+    const rightValue = right[column] ?? "";
+    const comparison =
+      typeof leftValue === "number" && typeof rightValue === "number"
+        ? leftValue - rightValue
+        : String(leftValue).localeCompare(String(rightValue));
 
     return direction === "DESC" ? -comparison : comparison;
   });
+}
+
+function compareWhereValue(
+  left: SqliteValue,
+  operator: string,
+  right: SqliteValue,
+): boolean {
+  switch (operator) {
+    case "=":
+      return left === right;
+    case "<":
+      return String(left ?? "") < String(right ?? "");
+    case ">":
+      return String(left ?? "") > String(right ?? "");
+    default:
+      throw new Error(`Unsupported in-memory WHERE operator: ${operator}`);
+  }
 }
 
 function applyLimitOffset(
