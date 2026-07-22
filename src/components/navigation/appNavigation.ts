@@ -13,10 +13,11 @@ export interface AppNavigationItem {
   readonly label: string;
   readonly icon: string;
   readonly implemented: boolean;
+  readonly url?: string;
 }
 
 export type NavigationTapFeedback =
-  | { readonly type: "noop" }
+  | { readonly type: "reLaunch"; readonly url: string }
   | { readonly type: "toast"; readonly message: string };
 
 export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
@@ -25,12 +26,14 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     label: "首页",
     icon: "H",
     implemented: true,
+    url: "/pages/home/index",
   },
   {
     key: "class",
     label: "班级",
     icon: "C",
-    implemented: false,
+    implemented: true,
+    url: "/pages/class/index",
   },
   {
     key: "study",
@@ -70,7 +73,15 @@ export function getNavigationTapFeedback(
     };
   }
 
+  if (item?.url !== undefined) {
+    return {
+      type: "reLaunch",
+      url: item.url,
+    };
+  }
+
   return {
-    type: "noop",
+    type: "toast",
+    message: "功能开发中",
   };
 }

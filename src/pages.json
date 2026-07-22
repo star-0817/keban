@@ -6,6 +6,13 @@
         "navigationBarTitleText": "课伴",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/class/index",
+      "style": {
+        "navigationBarTitleText": "班级",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
