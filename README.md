@@ -22,4 +22,31 @@
 
 ## 项目状态
 
-当前处于产品规划与技术设计阶段，尚未创建应用代码。
+当前已创建 UniApp Android 基础工程，包含 Vue 3、TypeScript、Pinia 和最小首页。
+
+## 本地启动
+
+环境要求：
+
+- Node.js 20.19 或更高版本。
+- Android 运行调试需要安装 HBuilderX 或 UniApp CLI 支持的 Android 调试环境。
+
+常用命令：
+
+```bash
+npm install
+npm run dev:android
+npm run type-check
+npm test
+npm run format:check
+```
+
+脚本说明：
+
+- `npm run dev` / `npm run dev:android`：启动 UniApp App 端开发构建。
+- `npm run build:android`：生成 App 端构建产物。
+- `npm run type-check`：运行 TypeScript 与 Vue 类型检查。
+- `npm test`：运行 Vitest 自动化测试。
+- `npm run format:check`：检查代码格式。
+
+当前工程仅包含基础启动页和验证 Store；尚未接入 SQLite、原生插件、文件/PDF/OCR、通知、广告、登录、网络请求或云端服务。
