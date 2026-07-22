@@ -22,7 +22,15 @@ domain
 - 重复初始化会跳过已记录版本，因此不会重复写入业务数据。
 - 每条迁移在独立事务中执行；迁移失败时回滚该版本的所有写入，不记录失败版本，并停止执行后续迁移。
 
-当前基础迁移只建立版本机制，不创建名单、课程表、计划、PDF 等业务表。
+当前初始迁移会创建版本记录、班级学生表、课程表和日程表。重复初始化会跳过已执行版本，不会重复写入业务数据。
+
+## Android SQLite 适配器
+
+- Android App 运行时通过 `src/plugins/sqlite.ts` 调用 `plus.sqlite`，数据库名固定为 `keban.db`，默认路径为 `_doc/keban.db`。
+- `plus.sqlite`、`uni` 平台检测和原生 SQLite 调用只允许存在于 `src/plugins/`。repository、service、store、page 不直接访问平台 API。
+- UniApp SQLite 类型定义未提供绑定参数字段，因此插件层负责把仓储传入的 `?` 参数严格序列化为 SQL 字面量。字符串会转义单引号，`null` 会转为 `NULL`，数字必须是有限值；参数数量不匹配会抛出中文错误。
+- 事务通过 `plus.sqlite.transaction` 映射为 `begin` / `commit` / `rollback`。业务操作失败时会尽力回滚；如果回滚也失败，会在错误中同时保留执行失败和回滚失败的中文上下文。
+- H5、Vitest、Node、浏览器预览、非 Android 平台或 `plus.sqlite` 不可用时，不伪造真机支持，统一降级为内存预览数据库。
 
 ## 测试替身
 
@@ -30,7 +38,7 @@ domain
 
 ## Android 真机验证清单
 
-当前任务没有接入真实 UniApp SQLite API，也没有在本环境伪造真机验证成功。后续接入真实适配器后，请在 Android 真机执行：
+本地自动化测试不能证明 `plus.sqlite` 真机能力。接入真实适配器后，请在 Android 真机执行：
 
 1. 全新安装 App，触发数据库初始化。
    预期：无崩溃，`schema_version` 创建成功，当前迁移版本被记录。
