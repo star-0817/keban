@@ -215,6 +215,20 @@ describe("groupRandomMembers", () => {
     ).toEqual({ ok: false, error: "分组方式必须且只能选择一种" });
   });
 
+  it("returns an error when typed group mode also includes the other mode parameter", () => {
+    expect(
+      groupRandomMembers({
+        members,
+        mode: {
+          type: "group-count",
+          groupCount: 2,
+          maxMembersPerGroup: 4,
+        },
+        seed: "x",
+      }),
+    ).toEqual({ ok: false, error: "分组方式必须且只能选择一种" });
+  });
+
   it("returns an error when exclusions remove every member", () => {
     const result = groupRandomMembers({
       members: [member("student-1", "Student 1")],

@@ -166,6 +166,16 @@ function getAvailableMembers<TMember extends GroupingMember>(
 function normalizeGroupingMode(
   mode: LooseGroupingMode,
 ): Result<GroupingMode, RandomRosterError> {
+  const groupCount = "groupCount" in mode ? mode.groupCount : undefined;
+  const maxMembersPerGroup =
+    "maxMembersPerGroup" in mode ? mode.maxMembersPerGroup : undefined;
+  const hasGroupCount = typeof groupCount === "number";
+  const hasMaxMembersPerGroup = typeof maxMembersPerGroup === "number";
+
+  if (hasGroupCount && hasMaxMembersPerGroup) {
+    return err("分组方式必须且只能选择一种");
+  }
+
   const looseGroupCount =
     !("type" in mode) && "groupCount" in mode ? mode.groupCount : undefined;
   const looseMaxMembersPerGroup =
