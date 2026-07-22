@@ -40,9 +40,9 @@ describe("roster migrations", () => {
     const first = await initializer.initialize();
     const second = await initializer.initialize();
 
-    expect(first).toEqual({ ok: true, value: { currentVersion: 2 } });
-    expect(second).toEqual({ ok: true, value: { currentVersion: 2 } });
-    expect(await database.getAppliedMigrationVersions()).toEqual([1, 2]);
+    expect(first).toEqual({ ok: true, value: { currentVersion: 3 } });
+    expect(second).toEqual({ ok: true, value: { currentVersion: 3 } });
+    expect(await database.getAppliedMigrationVersions()).toEqual([1, 2, 3]);
     expect(database.hasTable("rosters")).toBe(true);
     expect(database.hasTable("students")).toBe(true);
   });

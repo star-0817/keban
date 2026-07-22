@@ -53,4 +53,38 @@ export const INITIAL_MIGRATIONS: readonly DatabaseMigration[] = [
       `);
     },
   },
+  {
+    version: 3,
+    name: "create_schedule_tables",
+    up: async (transaction) => {
+      await transaction.execute(`
+        CREATE TABLE IF NOT EXISTS courses (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          teacher TEXT,
+          location TEXT,
+          weekday INTEGER NOT NULL,
+          start_slot INTEGER NOT NULL,
+          end_slot INTEGER NOT NULL,
+          start_time TEXT NOT NULL,
+          end_time TEXT NOT NULL,
+          term_id TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      `);
+      await transaction.execute(`
+        CREATE TABLE IF NOT EXISTS schedule_events (
+          id TEXT PRIMARY KEY,
+          title TEXT NOT NULL,
+          note TEXT,
+          starts_at TEXT NOT NULL,
+          ends_at TEXT NOT NULL,
+          location TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      `);
+    },
+  },
 ];
