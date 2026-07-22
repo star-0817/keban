@@ -39,7 +39,8 @@ export const APP_NAVIGATION_ITEMS: readonly AppNavigationItem[] = [
     key: "study",
     label: "学习",
     icon: "S",
-    implemented: false,
+    implemented: true,
+    url: "/pages/study/index",
   },
   {
     key: "documents",

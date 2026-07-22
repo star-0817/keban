@@ -24,14 +24,26 @@ describe("app navigation", () => {
   });
 
   it("returns route navigation for implemented tabs", () => {
+    expect(getNavigationTapFeedback("home")).toEqual({
+      type: "reLaunch",
+      url: "/pages/home/index",
+    });
     expect(getNavigationTapFeedback("class")).toEqual({
       type: "reLaunch",
       url: "/pages/class/index",
     });
+    expect(getNavigationTapFeedback("study")).toEqual({
+      type: "reLaunch",
+      url: "/pages/study/index",
+    });
   });
 
   it("keeps unfinished tabs on the development toast", () => {
-    expect(getNavigationTapFeedback("study")).toEqual({
+    expect(getNavigationTapFeedback("documents")).toEqual({
+      type: "toast",
+      message: "功能开发中",
+    });
+    expect(getNavigationTapFeedback("profile")).toEqual({
       type: "toast",
       message: "功能开发中",
     });
