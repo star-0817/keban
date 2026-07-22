@@ -27,4 +27,30 @@ export const INITIAL_MIGRATIONS: readonly DatabaseMigration[] = [
       return;
     },
   },
+  {
+    version: 2,
+    name: "create_roster_tables",
+    up: async (transaction) => {
+      await transaction.execute(`
+        CREATE TABLE IF NOT EXISTS rosters (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          metadata TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      `);
+      await transaction.execute(`
+        CREATE TABLE IF NOT EXISTS students (
+          id TEXT PRIMARY KEY,
+          roster_id TEXT,
+          name TEXT NOT NULL,
+          student_no TEXT,
+          note TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      `);
+    },
+  },
 ];
