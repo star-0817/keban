@@ -23,16 +23,17 @@ describe("app navigation", () => {
     });
   });
 
-  it("returns a development toast for unfinished tabs", () => {
+  it("returns route navigation for implemented tabs", () => {
     expect(getNavigationTapFeedback("class")).toEqual({
-      type: "toast",
-      message: "功能开发中",
+      type: "reLaunch",
+      url: "/pages/class/index",
     });
   });
 
-  it("does not show feedback when tapping the implemented home tab", () => {
-    expect(getNavigationTapFeedback("home")).toEqual({
-      type: "noop",
+  it("keeps unfinished tabs on the development toast", () => {
+    expect(getNavigationTapFeedback("study")).toEqual({
+      type: "toast",
+      message: "功能开发中",
     });
   });
 });

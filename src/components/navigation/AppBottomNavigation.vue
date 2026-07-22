@@ -18,6 +18,13 @@ function handleTap(key: AppNavigationKey): void {
       icon: "none",
       duration: 1400,
     });
+    return;
+  }
+
+  if (feedback.type === "reLaunch") {
+    uni.reLaunch({
+      url: feedback.url,
+    });
   }
 }
 </script>
