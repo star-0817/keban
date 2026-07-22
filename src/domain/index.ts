@@ -5,5 +5,6 @@ export * from "./grouping";
 export * from "./ids";
 export * from "./result";
 export * from "./roster";
+export * from "./study";
 export * from "./time";
 export * from "./validation";
