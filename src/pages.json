@@ -13,6 +13,13 @@
         "navigationBarTitleText": "班级",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/study/index",
+      "style": {
+        "navigationBarTitleText": "学习",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
