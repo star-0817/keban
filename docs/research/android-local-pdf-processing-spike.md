@@ -202,31 +202,37 @@ fun mergePdfs(
     pdfUris: List<Uri>,
     outputFile: File
 ): Uri {
-    val merger = PDFMergerUtility()
+    PDFBoxResourceLoader.init(context)
+
     val tempFiles = mutableListOf<File>()
 
-    pdfUris.forEachIndexed { index, uri ->
-        val temp = File.createTempFile("source-$index-", ".pdf", context.cacheDir)
-        context.contentResolver.openInputStream(uri).use { input ->
-            requireNotNull(input) { "无法读取 PDF：$uri" }
-            temp.outputStream().use { output -> input.copyTo(output) }
+    try {
+        val merger = PDFMergerUtility()
+
+        pdfUris.forEachIndexed { index, uri ->
+            val temp = File.createTempFile("source-$index-", ".pdf", context.cacheDir)
+            tempFiles += temp
+
+            context.contentResolver.openInputStream(uri).use { input ->
+                requireNotNull(input) { "无法读取 PDF：$uri" }
+                temp.outputStream().use { output -> input.copyTo(output) }
+            }
+            merger.addSource(temp)
         }
-        tempFiles += temp
-        merger.addSource(temp)
+
+        outputFile.outputStream().use { output ->
+            merger.destinationStream = output
+            merger.mergeDocuments(MemoryUsageSetting.setupTempFileOnly())
+        }
+
+        return FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            outputFile
+        )
+    } finally {
+        tempFiles.forEach { it.delete() }
     }
-
-    outputFile.outputStream().use { output ->
-        merger.destinationStream = output
-        merger.mergeDocuments(MemoryUsageSetting.setupTempFileOnly())
-    }
-
-    tempFiles.forEach { it.delete() }
-
-    return FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.fileprovider",
-        outputFile
-    )
 }
 ```
 
@@ -242,7 +248,7 @@ fun mergePdfs(
 当前电脑未连接 Android 真机，也未创建原生插件工程，因此本次没有声称已经完成真机验证。后续真机验证应按以下步骤执行：
 
 1. 在 Android Studio 或 HBuilderX 原生插件工程中加入上述 Kotlin 验证代码。
-2. 若验证 PDF 合并，加入 `com.tom-roush:pdfbox-android` 依赖，并记录实际版本号、AAR 增量和许可证文件。
+2. 若验证 PDF 合并，加入 `com.tom-roush:pdfbox-android` 依赖，确认调用 `PDFBoxResourceLoader.init(context)`，并记录实际版本号、AAR 增量和许可证文件。
 3. 配置 `FileProvider`，允许分享 App 私有文档目录下的输出 PDF。
 4. 在 Android 10、Android 13、Android 15 或可获得的代表性真机上安装 Debug 包。
 5. 关闭网络或开启飞行模式，确认处理过程不依赖网络。
